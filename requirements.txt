@@ -4,3 +4,4 @@ pytrends
 pandas
 plotly
 youtube-transcript-api
+google-generativeai
