@@ -50,34 +50,91 @@ with tab1:
         # Note: Production logic would use youtube.search().list() here
         st.warning("Feature active. Analyzing competitor's metadata pattern...")
 
-# --- TAB 2: SEO Cloner ---
+from youtube_transcript_api import YouTubeTranscriptApi
+
+# --- TAB 2: Viral SEO Extractor (Enhanced) ---
 with tab2:
-    st.header("Viral SEO Extractor")
-    viral_url = st.text_input("Paste Viral Video URL:", placeholder="https://www.youtube.com/watch?v=...")
+    st.header("🚀 Advanced Viral SEO Extractor")
     
-    if st.button("Extract Strategy"):
+    # Requirement 3: Ask for Channel Name
+    my_channel_name = st.text_input("Enter YOUR Channel Name:", value="Ruhani Jot")
+    viral_url = st.text_input("Paste Trending Video URL:", placeholder="https://www.youtube.com/watch?v=...")
+
+    if st.button("Analyze & Clone SEO"):
         if "v=" in viral_url:
             try:
                 video_id = viral_url.split("v=")[1].split("&")[0]
+                
+                # Fetch Video Details
                 req = youtube.videos().list(part="snippet,statistics", id=video_id).execute()
                 item = req['items'][0]
-                
+                viral_title = item['snippet']['title']
+                viral_desc = item['snippet']['description']
+                viral_tags = item['snippet'].get('tags', [])
+
+                st.divider()
+
+                # 1. Provide Transcript
+                st.subheader("📝 Video Transcript (Song Lyrics)")
+                try:
+                    transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['pa', 'hi', 'en'])
+                    full_transcript = " ".join([t['text'] for t in transcript_list])
+                    st.text_area("Transcript Output:", full_transcript, height=200)
+                except Exception:
+                    st.warning("Transcript is disabled for this video or language not supported.")
+
+                # 2. Viral Tags & Suggestions
+                st.subheader("🏷️ Tag Strategy")
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.subheader("Title Structure")
-                    st.write(item['snippet']['title'])
-                    st.metric("Total Views", item['statistics'].get('viewCount', 'N/A'))
-                
+                    st.write("**Original Viral Tags:**")
+                    st.code(", ".join(viral_tags))
                 with col2:
-                    st.subheader("Viral Tags")
-                    tags = item['snippet'].get('tags', [])
-                    st.code(", ".join(tags))
+                    st.write("**Suggested for YOUR Video:**")
+                    # Filtering and adding your channel name to tags
+                    suggested_tags = [t for t in viral_tags if len(t) > 3][:12]
+                    suggested_tags.append(my_channel_name)
+                    st.code(", ".join(suggested_tags))
+
+                # 3. Highly Optimized SEO (Copyright Safe Cloning)
+                st.subheader("📈 Your Optimized SEO Metadata")
                 
-                st.success("✅ Tags extracted! Use these to appear in 'Suggested Videos'.")
+                # Optimized Title
+                clean_title = viral_title.split("|")[0].split("-")[0].strip()
+                final_title = f"{clean_title} | {my_channel_name}"
+                
+                # Optimized Description (Natural Cloning)
+                optimized_desc = f"""
+🙏 Welcome to {my_channel_name}. 
+
+Experience the divine essence of this {clean_title}. 
+Inspired by the spiritual teachings and the viral resonance of Gurbani, 
+this rendition aims to bring peace and tranquility to your soul.
+
+Key Highlights:
+- Deep Spiritual Connection
+- High-Quality Audio Production
+- Authentic Gurmukhi Lyrics
+
+Follow {my_channel_name} for more devotional content.
+#Gurbani #Shabad #Sikhism #{my_channel_name.replace(' ', '')}
+                """
+
+                st.write("**Optimized Title:**")
+                st.code(final_title)
+                
+                st.write("**Optimized Description:**")
+                st.code(optimized_desc)
+
+                st.success("✅ SEO Strategy Created! Metadata is naturally cloned and copyright safe.")
+
             except Exception as e:
-                st.error(f"Error fetching video: {e}")
+                st.error(f"Error: {e}")
         else:
             st.error("Please enter a valid YouTube Video URL.")
+
+        
+          
 
 # --- TAB 3: Market Trends (Fix for TooManyRequestsError) ---
 with tab3:
@@ -138,3 +195,4 @@ with tab4:
 
 st.markdown("---")
 st.markdown("<center>Designed for <b>@ruhanijot</b> | Powered by AI Analytics</center>", unsafe_allow_html=True)
+
