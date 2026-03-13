@@ -63,7 +63,29 @@ with tab1:
 
                     # 4. Gemini AI Prompt
                     prompt = f"""
-                    You are a world-class YouTube SEO expert. 
+                    You are a world-class YouTube SEO expert. You have extracted the Title and Description of a trending video by the singer/creator.
+
+My goal is to create an original video in the same niche. Please analyze the provided metadata and generate an SEO strategy for my original content that mimics the Search Intent without copying the Creative Expression.
+
+Data to Analyze:
+
+Title: [Paste Video Title Here]
+
+Description: [Paste Video Description Here]
+
+Please provide the following:
+
+Search Intent Analysis: Identify the 5 primary high-volume keywords this video is targeting.
+
+Original Title Hooks: Generate 3 original titles for my video that use those 5 keywords but are phrased differently to avoid duplication.
+
+Thematic Description: Write a 250-word original description for my video. Use the same 'keyword density' as the trending video, but rewrite the narrative entirely to reflect my brand's voice.
+
+Tag Cloud: A list of 20 relevant tags based on the trending video’s niche, excluding any specific names or trademarks of the original creator.
+
+Competitor Gap: Suggest 2-3 'Long-tail Keywords' that the trending video missed, which I can use to capture search traffic they aren't reaching.
+
+Safety Constraint: Do not use any trademarked names, copyrighted song titles, or the specific channel name of the source video in my metadata. Focus strictly on the generic topic (e.g., 'Sikh History,' 'Punjabi Sufi,' 'Devotional Shabad')."
                     Original Title: {v_title}
                     Original Tags: {', '.join(v_tags)}
                     Original Description Snippet: {v_desc[:500]}
